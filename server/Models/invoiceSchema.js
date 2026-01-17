@@ -16,7 +16,6 @@ const invoiceSchema = new mongoose.Schema(
 
     invoiceNumber: {
       type: String,
-      required: true,
       unique: true,
     },
 
@@ -28,10 +27,17 @@ const invoiceSchema = new mongoose.Schema(
       contactNo: String,
       gstNumber: String,
       tax: {
-        cgst: Number,
-        sgst: Number,
-      },
-      logo: String,
+        cgst: {
+          type: Number,
+          default: 0,
+        },
+        sgst: {
+          type: Number,
+          default: 0,
+        },
+
+      }
+      // logo: String,
     },
 
     //  Customer details
@@ -41,8 +47,7 @@ const invoiceSchema = new mongoose.Schema(
         required: true,
       },
       phone: String,
-      email: String,
-      address: String,
+      email: String
     },
 
     //  Invoice items
@@ -61,9 +66,15 @@ const invoiceSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
-        taxPercent: {
-          type: Number,
-            required: true,
+        tax: {
+          cgst: {
+            type: Number,
+            default: 0,
+          },
+          sgst: {
+            type: Number,
+            default: 0,
+          }
         },
         total: {
           type: Number,
@@ -89,8 +100,8 @@ const invoiceSchema = new mongoose.Schema(
     //  Payment info
     status: {
       type: String,
-      enum: ["paid", "unpaid"],
-      default: "unpaid",
+      enum: ["paid", "unpaid","draft"],
+      default: "draft",
     },
     paymentDate: Date,
 
@@ -100,7 +111,7 @@ const invoiceSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
 

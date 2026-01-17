@@ -23,7 +23,7 @@ const businessSchema=new mongoose.Schema({
         minlength:10,
         maxlength:10,
     },
-    GST_NO:{
+    gstNumber:{
         type:String,
         required:true,
     },
@@ -35,12 +35,12 @@ const businessSchema=new mongoose.Schema({
       sgst: {
         type: Number,
         default: 0,
-      },
-    },
-    logo:{
-        type:String,
-        required:true,
+      }
     }
+    // logo:{
+    //     type:String,
+    //     required:true,
+    // }
 },{
     timestamps:true,
 });
