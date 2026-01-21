@@ -5,12 +5,12 @@ const business=require("../Models/businessSchema");
 // create business
 router.post("/create",async(req,res)=>{
     try{
-        const{businessName,businessOwner,Address,contactNo,gstNumber,tax}=req.body;
+        const{businessName,businessOwner,Address,contactNo,gstNumber,tax,userId}=req.body;
         const existbusiness=await business.findOne({gstNumber});
         if(existbusiness){
             return res.status(400).json({message:"business already exist"});
         }
-        await business.create({userId:'696958f1ec1caaaec092637d',businessName,businessOwner,Address,contactNo,gstNumber,tax});
+        await business.create({userId,businessName,businessOwner,Address,contactNo,gstNumber,tax});
         return res.status(201).json({message:"Business registered successfully"});
     }
     catch(error){
@@ -19,9 +19,10 @@ router.post("/create",async(req,res)=>{
 })
 
 // get my business 
-router.get("/my",async(req,res)=>{
+router.get("/my/:userId",async(req,res)=>{
+    const userId=req.params.userId;
     try{
-        const mybussiness=await business.findOne({userId:req.user.id});
+        const mybussiness=await business.findOne({userId});
         if(!mybussiness){
             return res.status(400).json({message:"No business exist"});
         }
@@ -35,12 +36,12 @@ router.get("/my",async(req,res)=>{
 
 // update my business
 
-router.put("/update",async(req,res)=>{
+router.put("/update/:userId",async(req,res)=>{
     try{
-        const userID="696958f1ec1caaaec092637d";
+        const userId=req.params.userId;
         const{businessName,businessOwner,Address,contactNo,tax}=req.body;
 
-        const updatedBusiness=await business.findOneAndUpdate({userId:userID},{businessName,businessOwner,Address,contactNo,tax},{new:true});
+        const updatedBusiness=await business.findOneAndUpdate({userId},{businessOwner,Address,contactNo,tax},{new:true});
         if(!updatedBusiness){
             return res.status(404).json({message:'business not found'});
         }   

@@ -16,7 +16,8 @@ const invoiceSchema = new mongoose.Schema(
 
     invoiceNumber: {
       type: String,
-      unique: true,
+      unique:true,
+      sparse:true
     },
 
     //  Business 
@@ -47,7 +48,8 @@ const invoiceSchema = new mongoose.Schema(
         required: true,
       },
       phone: String,
-      email: String
+      email: String,
+      address: String,
     },
 
     //  Invoice items

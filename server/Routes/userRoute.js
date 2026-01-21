@@ -27,7 +27,11 @@ router.post("/login",async(req,res)=>{
         if(!existUser||existUser.password!==password){
             return res.status(401).json({message:'Invalid email or password'});
         }
-        return res.status(200).json({message:'Login successful',userId:existUser._id} );
+        return res.status(200).json({message:'Login successful',userInfo:{
+            userId:existUser._id,
+            name:existUser.name,
+            email:existUser.email
+        }} );
     }
     catch(error){
         return res.status(500).json({message:'Internal server error'});
@@ -37,9 +41,9 @@ router.post("/login",async(req,res)=>{
 // update user
 router.put("/update/:id",async(req,res)=>{
     const userId=req.params.id;
-    const {name,password}=req.body;
+    const {name}=req.body;
     try{
-        const updatedUser=await User.findByIdAndUpdate(userId,{name,password},{new:true});
+        const updatedUser=await User.findByIdAndUpdate(userId,{name},{new:true});
         if(!updatedUser){
             return res.status(404).json({message:'User not found'});
         }   
@@ -51,5 +55,22 @@ router.put("/update/:id",async(req,res)=>{
 })
 
 
+// fetch userProfile by its userId(login user)
+router.get("/profile/:id",async(req,res)=>{
+    const userId=req.params.id;
+    try{
+        const user=await User.findById(userId);
+        if(!user){
+            return res.status(404).json({message:'User not found'});
+        }
+        return res.status(200).json({message:'User profile fetched successfully',user:{
+            name:user.name,
+            email:user.email
+        }});
+    }
+    catch(error){
+        return res.status(500).json({message:'Internal server error'});
+    }
+});
 
 module.exports=router;

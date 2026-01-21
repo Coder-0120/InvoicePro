@@ -1,11 +1,14 @@
 const express=require("express");
 const app=express();
+const cors=require("cors");
 const userRoute=require("./Routes/userRoute.js");
 const businessRoute=require("./Routes/businessRoute.js");
 const invoiceRoute=require("./Routes/invoiceRoute.js");
 const connectDB=require("./config/db.js");
 require("dotenv").config();
 app.use(express.json());
+app.use(cors());
+
 connectDB();
 app.get("/",(req,res)=>{
     res.send("hello world ");
