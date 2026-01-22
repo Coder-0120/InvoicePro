@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const Invoices = () => {
   const navigate = useNavigate();
   const [invoices, setInvoices] = useState([]);
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
-const storedData = JSON.parse(localStorage.getItem("UserInfo"));
+  const storedData = JSON.parse(localStorage.getItem("UserInfo"));
 
-const userId = storedData?.userInfo?.userId || null;
+  const userId = storedData?.userInfo?.userId || null;
   // Fetch invoices from backend
-  useEffect(() => {
-    const fetchInvoices = async () => {
+  const fetchInvoices = async () => {
       try {
         setLoading(true);
         const res = await axios.get(`http://localhost:5000/api/invoice/allmy/${userId}`, {
@@ -24,6 +24,7 @@ const userId = storedData?.userInfo?.userId || null;
         setLoading(false);
       }
     };
+  useEffect(() => {
     fetchInvoices();
   }, []);
 
@@ -70,30 +71,34 @@ const userId = storedData?.userInfo?.userId || null;
   const finalize = async (invoiceId) => {
     try {
       await axios.put(`http://localhost:5000/api/invoice/finalize/${invoiceId}`);
-      alert("Invoice finalized successfully");
+      toast.success("Invoice finalized successfully");
+      await fetchInvoices();
     }
     catch (error) {
       console.log("Error finalizing invoice");
-      alert("Error finalizing invoice");
+      toast.error("Error finalizing invoice");
 
     }
   }
   const markAsPaid = async (invoiceId) => {
     try {
       await axios.put(`http://localhost:5000/api/invoice/paid/${invoiceId}`);
-      alert("Invoice marked as paid successfully");
+      toast.success("Invoice marked as paid successfully");
+      // window.location.reload();
+      await fetchInvoices();
     }
     catch (error) {
-      alert("Error marking invoice as paid");
+      toast.error("Error marking invoice as paid");
     }
   };
   const cancelInvoice = async (invoiceId) => {
     try {
       await axios.put(`http://localhost:5000/api/invoice/cancel/${invoiceId}`);
-      alert("Invoice cancelled successfully");
+      toast.success("Invoice cancelled successfully");
+      await fetchInvoices();
     }
     catch (error) {
-      alert("Error cancelling invoice");
+      toast.error("Error cancelling invoice");
     }
   };
 
@@ -230,33 +235,33 @@ const userId = storedData?.userInfo?.userId || null;
                         </button>
                         {invoice.status === "draft" && (
                           <>
-                          <button style={styles.editBtn} title="Edit Invoice" disabled={invoice.status !== "draft"} onClick={() => handleEdit(invoice._id)}>
-                            <svg style={styles.actionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                          </button>
-                           <button style={styles.finalizeBtn} title="Finalize Invoice" disabled={invoice.status !== "draft"} onClick={() => finalize(invoice._id)}>
-                          <svg style={styles.actionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
-                        </button>
+                            <button style={styles.editBtn} title="Edit Invoice" disabled={invoice.status !== "draft"} onClick={() => handleEdit(invoice._id)}>
+                              <svg style={styles.actionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                            </button>
+                            <button style={styles.finalizeBtn} title="Finalize Invoice" disabled={invoice.status !== "draft"} onClick={() => finalize(invoice._id)}>
+                              <svg style={styles.actionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                            </button>
                           </>
                         )}
 
                         {invoice.status === "unpaid" && (
                           <>
-                            
+
                             <button style={styles.cancelbtn} title="Cancel Invoice" onClick={() => cancelInvoice(invoice._id)}>
                               <svg style={styles.cancelIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 22a10 10 0 100-20 10 10 0 000 20zM15 9l-6 6M9 9l6 6" />
                               </svg>
                             </button>
-                            <button title="Mark as Paid" disabled={invoice.status !== "unpaid"} onClick={() => markAsPaid(invoice._id)} >
+                            <button style={styles.paidBtn} title="Mark as Paid" disabled={invoice.status !== "unpaid"} onClick={() => markAsPaid(invoice._id)} >
                               <svg style={styles.paidIcon} viewBox="0 0 24 24" fill="white" stroke="green" >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M12 22a10 10 0 100-20 10 10 0 000 20z"/>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M12 22a10 10 0 100-20 10 10 0 000 20z" />
                               </svg>
                             </button>
-                          
+
 
                           </>
 
@@ -396,6 +401,7 @@ const styles = {
   cancelIcon: {
     width: '16px',
     height: '16px',
+    cursor: 'pointer',
   },
   filterBar: {
     display: 'flex',
@@ -574,6 +580,16 @@ const styles = {
     cursor: 'pointer',
     transition: 'all 0.2s',
   },
+  finalizeBtn: {
+  padding: '8px',
+  background: '#fff7ed',     // light orange
+  color: '#f97316',          // orange text
+  border: '1px solid #fdba74',
+  borderRadius: '6px',
+  cursor: 'pointer',
+  transition: 'all 0.2s',
+},
+
   deleteBtn: {
     padding: '8px',
     background: '#fef2f2',
@@ -586,7 +602,18 @@ const styles = {
   cancelbtn: {
     padding: '8px',
     background: '#fef2f2',
+    border: '1px solid #fecaca',
+    cursor: 'pointer',
     color: '#ef4444',
+  },
+  paidBtn: {
+    padding: '8px',
+    background: '#dcfce7',  
+    color: '#166534',
+    border: '1px solid #86efac',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
   },
   actionIcon: {
     width: '16px',

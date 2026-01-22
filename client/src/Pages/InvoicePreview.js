@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FileText, Mail, Phone, MapPin, Calendar, Download, Printer, Edit, ArrowLeft } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const InvoicePreview = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ const InvoicePreview = () => {
         setInvoice(res.data.invoice);
         setLoading(false);
       } catch (error) {
-        alert('Failed to load invoice');
+        toast.error('Failed to load invoice');
         navigate('/invoices');
       }
     };
@@ -54,7 +55,7 @@ const InvoicePreview = () => {
       link.remove();
     } catch (error) {
       console.error('Download failed:', error);
-      alert('Failed to download invoice');
+      toast.error('Failed to download invoice');
     }
   };
 
@@ -245,12 +246,13 @@ const InvoicePreview = () => {
 const styles = {
   wrapper: {
     minHeight: '100vh',
-    background: '#f1f5f9',
+    // background: '#f1f5f9',
     padding: '24px',
     fontFamily: 'system-ui, sans-serif'
   },
   container: {
     maxWidth: '900px',
+
     margin: '0 auto'
   },
   actionBar: {

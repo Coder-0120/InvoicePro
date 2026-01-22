@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const DashboardLayout = ({ children }) => {
@@ -21,8 +22,8 @@ const DashboardLayout = ({ children }) => {
 
   const handleLogout = () => {
     localStorage.removeItem("UserInfo");
-    alert("Logged out successfully!");
-    navigate("/login");
+    toast.success("Logged out successfully!");
+    navigate("/home");
   };
 
   const menuItems = [
@@ -64,8 +65,8 @@ const DashboardLayout = ({ children }) => {
       }}>
         {/* Logo Section */}
         <div style={styles.sidebarHeader}>
-          <div style={styles.logoBox}>
-            <svg style={styles.logoIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <div style={styles.logoBox} >
+            <svg style={styles.logoIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" onClick={()=>window.location.href="/home"}>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
@@ -186,6 +187,7 @@ const styles = {
     width: '28px',
     height: '28px',
     color: '#fff',
+    cursor: 'pointer',
   },
   brandName: {
     fontSize: '22px',

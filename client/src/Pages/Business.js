@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Building2, User, Phone, FileText, MapPin, Percent } from 'lucide-react';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const Business = () => {
   const [formData, setFormData] = useState({
@@ -97,23 +98,21 @@ const Business = () => {
       let res;
 
       if (isBusinessCreated) {
-        // 🔄 UPDATE (GST not allowed)
         res = await axios.put(
           `http://localhost:5000/api/business/update/${userId}`,
           payload
         );
       } else {
-        // 🆕 CREATE
         res = await axios.post(
           "http://localhost:5000/api/business/create",
           { ...payload, gstNumber: formData.gstNumber }
         );
       }
 
-      alert(res.data.message);
+      toast.success(res.data.message);
       setIsBusinessCreated(true);
     } catch (error) {
-      alert(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -311,16 +310,19 @@ const Business = () => {
   );
 };
 
+
 const styles = {
-  wrapper: {
-    minHeight: '100vh',
-    background: '#f1f5f9',
-    padding: '24px',
-    fontFamily: 'system-ui, sans-serif'
-  },
+  // wrapper: {
+  //   minHeight: '100vh',
+  //   background: '#f1f5f9',
+  //   padding: '24px',
+  //   fontFamily: 'system-ui, sans-serif'
+  // },
   container: {
-    maxWidth: '900px',
-    margin: '0 auto'
+    maxWidth: '1200px', //900px
+    margin: '0 auto',
+    padding: '24px',
+    minHeight: '100vh',
   },
   header: {
     textAlign: 'center',
@@ -448,7 +450,7 @@ const styles = {
   saveBtn: {
     flex: 1,
     padding: '14px',
-    background: '#059669',
+    background: 'linear-gradient(to right, #059669, #0891b2)',
     color: '#fff',
     border: 'none',
     borderRadius: '8px',

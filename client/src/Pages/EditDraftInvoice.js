@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { FileText, User, Package, Plus, Trash2, Save, X } from 'lucide-react';
+import toast from "react-hot-toast";
 
 const EditDraftInvoice = () => {
   const { id } = useParams();
@@ -26,7 +27,7 @@ const EditDraftInvoice = () => {
         const res = await axios.get(`http://localhost:5000/api/invoice/my/${id}`);
 
         if (res.data.invoice.status !== "draft") {
-          alert("Only draft invoices can be edited");
+          toast.error("Only draft invoices can be edited");
           navigate("/invoices");
           return;
         }
@@ -35,7 +36,7 @@ const EditDraftInvoice = () => {
         setItems(res.data.invoice.items);
         setLoading(false);
       } catch (error) {
-        alert("Failed to load invoice");
+        toast.error("Failed to load invoice");
         navigate("/invoices");
       }
     };
@@ -98,10 +99,10 @@ const EditDraftInvoice = () => {
         items
       });
 
-      alert("Draft invoice updated successfully");
+      toast.success("Draft invoice updated successfully");
       navigate("/invoices");
     } catch (error) {
-      alert(error.response?.data?.message || "Update failed");
+      toast.error(error.response?.data?.message || "Update failed");
     } finally {
       setSaving(false);
     }
@@ -306,12 +307,13 @@ const EditDraftInvoice = () => {
 const styles = {
   wrapper: {
     minHeight: '100vh',
-    background: '#f1f5f9',
+    // background: '#f1f5f9',
     padding: '24px',
     fontFamily: 'system-ui, sans-serif'
   },
   container: {
-    maxWidth: '900px',
+    maxWidth: '1200px',
+
     margin: '0 auto'
   },
   header: {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const Profile = () => {
   const [profileData, setProfileData] = useState({
@@ -35,7 +36,7 @@ const Profile = () => {
       await axios.put(`http://localhost:5000/api/user/update/${userId}`, {
         name: profileData.name
       });
-      alert("Profile updated successfully");
+      toast.success("Profile updated successfully");
       const existingData = JSON.parse(localStorage.getItem("UserInfo"));
 
       localStorage.setItem(
@@ -52,7 +53,7 @@ const Profile = () => {
     }
     catch (error) {
       console.log(error);
-      alert("Error in updating profile");
+      toast.error("Error in updating profile");
     }
   };
 

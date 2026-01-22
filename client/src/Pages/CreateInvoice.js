@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FileText, User, Package, Plus, Trash2 } from 'lucide-react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const CreateInvoice = () => {
   const [formData, setFormData] = useState({
@@ -72,7 +73,7 @@ const storedData = JSON.parse(localStorage.getItem("UserInfo"));
 const userId = storedData?.userInfo?.userId || null;
 
       if (!userId) {
-        alert('Please login first');
+        toast.error('Please login first');
         setLoading(false);
         return;
       }
@@ -93,14 +94,14 @@ const userId = storedData?.userInfo?.userId || null;
       const data = await response.data;
 
       if (response.status === 201 || response.status === 200) {
-        alert(data.message || 'Invoice created successfully!');
+        toast.success(data.message || 'Invoice created successfully!');
         handleReset();
       } else {
-        alert(data.message || 'Failed to create invoice');
+        toast.error(data.message || 'Failed to create invoice');
       }
     } catch (error) {
       console.error('Error creating invoice:', error);
-      alert("business details not filled");
+      toast.error("business details not filled");
     } finally {
       setLoading(false);
     }
@@ -297,13 +298,15 @@ const userId = storedData?.userInfo?.userId || null;
 const styles = {
   wrapper: {
     minHeight: '100vh',
-    background: '#f1f5f9',
+    // background: '#f1f5f9',
     padding: '24px',
     fontFamily: 'system-ui, sans-serif'
   },
   container: {
-    maxWidth: '900px',
-    margin: '0 auto'
+    maxWidth: '1200px',
+    margin: '0 auto',
+    minHeight: '100vh',
+    background: '#f8fafc',
   },
   header: {
     textAlign: 'center',
@@ -420,7 +423,7 @@ const styles = {
   addBtn: {
     width: '100%',
     padding: '12px',
-    background: '#059669',
+    background: 'linear-gradient(to right, #059669, #0891b2)',
     color: '#fff',
     border: 'none',
     borderRadius: '8px',
@@ -463,7 +466,7 @@ const styles = {
   saveBtn: {
     flex: 1,
     padding: '14px',
-    background: '#059669',
+    background: 'linear-gradient(to right, #059669, #0891b2)',
     color: '#fff',
     border: 'none',
     borderRadius: '8px',
