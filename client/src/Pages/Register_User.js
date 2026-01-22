@@ -42,7 +42,7 @@ const Register_User = () => {
           <div style={styles.logoBox} onClick={() => window.location.href = "/home"}>
             <FileText size={32} color="white" />
           </div>
-          <h1 style={styles.brandName}>InvoiceApp</h1>
+          <h1 style={styles.brandName}>InvoicePro</h1>
           <p style={styles.brandTagline}>Professional invoice management made simple</p>
         </div>
 

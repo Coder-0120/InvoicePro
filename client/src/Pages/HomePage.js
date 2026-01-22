@@ -107,7 +107,7 @@ const HomePage = () => {
         <div style={styles.navContent}>
           <div style={styles.logo} onClick={() => window.location.href = '/home'}>
             <FileText size={32} color="#059669" />
-            <span style={styles.logoText}>InvoiceApp</span>
+            <span style={styles.logoText}>InvoicePro</span>
           </div>
           <div style={styles.navLinks}>
             <button
@@ -326,7 +326,7 @@ const HomePage = () => {
             Ready to streamline your invoicing?
           </h2>
           <p style={styles.ctaSubtitle}>
-            Join thousands of businesses already using InvoiceApp to get paid faster
+            Join thousands of businesses already using InvoicePro to get paid faster
           </p>
           <div style={styles.ctaButtonGroup}>
             <button
@@ -355,7 +355,7 @@ const HomePage = () => {
           <div style={styles.footerLeft}>
             <div style={styles.footerLogo}>
               <FileText size={28} color="#059669" />
-              <span style={styles.footerLogoText}>InvoiceApp</span>
+              <span style={styles.footerLogoText}>InvoicePro</span>
             </div>
             <p style={styles.footerTagline}>
               Professional invoicing made simple
@@ -363,7 +363,7 @@ const HomePage = () => {
           </div>
           <div style={styles.footerRight}>
             <p style={styles.footerCopyright}>
-              © 2025 InvoiceApp. All rights reserved.
+              © 2025 InvoicePro. All rights reserved.
             </p>
           </div>
         </div>
