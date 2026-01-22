@@ -2,6 +2,8 @@
 
 **InvoicePro** is a secure, modern, and responsive **invoice creation & tracking web application** designed for small businesses and professionals.  
 It allows users to create, manage, track, and analyze invoices with instant tax calculations and a controlled invoice lifecycle — all from one dashboard.
+<img width="1897" height="1080" alt="Screenshot (103)" src="https://github.com/user-attachments/assets/59f0b425-01d5-4621-aa97-09f1e66d810c" />
+
 
 ---
 
@@ -110,7 +112,7 @@ It ensures **accuracy, security, and consistency** throughout the invoicing proc
 git clone https://github.com/Coder-0120/Invoice_App.git
 cd InvoicePro
 
-
+```
 Install backend dependencies
 ```bash
 cd server
