@@ -18,3 +18,301 @@ user-->signup-->fill business details--->fill customer details or edit any prefi
 -- change status of invoice(paid/unpaid)
 -- show preview of it 
 -- pdf download option
+
+
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import { FileText, User, Package, Plus, Trash2, Save, X } from 'lucide-react';
+
+const EditDraftInvoice = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [customer, setCustomer] = useState({
+    name: "",
+    phone: "",
+    email: ""
+  });
+
+  const [items, setItems] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  // ================= FETCH INVOICE =================
+  useEffect(() => {
+    const fetchInvoice = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/invoice/my/${id}`);
+
+        if (res.data.invoice.status !== "draft") {
+          alert("Only draft invoices can be edited");
+          navigate("/invoices");
+          return;
+        }
+
+        setCustomer(res.data.invoice.customer);
+        setItems(res.data.invoice.items);
+        setLoading(false);
+      } catch (error) {
+        alert("Failed to load invoice");
+        navigate("/invoices");
+      }
+    };
+
+    fetchInvoice();
+  }, [id, navigate]);
+
+  // ================= ITEM UPDATE =================
+  const updateItem = (index, field, value) => {
+    const updated = [...items];
+    updated[index][field] = value;
+    setItems(updated);
+  };
+
+  const addItem = () => {
+    setItems([
+      ...items,
+      { itemName: "", price: 0, quantity: 1 }
+    ]);
+  };
+
+  const removeItem = (index) => {
+    if (items.length > 1) {
+      const updated = items.filter((_, i) => i !== index);
+      setItems(updated);
+    }
+  };
+
+  // ================= VALIDATION =================
+  const validate = () => {
+    const newErrors = {};
+    
+    if (!customer.name.trim()) newErrors.customerName = 'Required';
+    
+    items.forEach((item, index) => {
+      if (!item.itemName.trim()) {
+        newErrors[`item_${index}_name`] = 'Required';
+      }
+      if (item.quantity < 1) {
+        newErrors[`item_${index}_qty`] = 'Min 1';
+      }
+      if (item.price <= 0) {
+        newErrors[`item_${index}_price`] = 'Must be > 0';
+      }
+    });
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // ================= UPDATE DRAFT =================
+  const updateDraftInvoice = async () => {
+    if (!validate()) return;
+
+    setSaving(true);
+    try {
+      await axios.put(`http://localhost:5000/api/invoice/${id}`, {
+        customer,
+        items
+      });
+
+      alert("Draft invoice updated successfully");
+      navigate("/invoices");
+    } catch (error) {
+      alert(error.response?.data?.message || "Update failed");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleCancel = () => {
+    if (window.confirm('Are you sure you want to cancel? Unsaved changes will be lost.')) {
+      navigate("/invoices");
+    }
+  };
+
+  const calculateSubtotal = () => {
+    return items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+  };
+
+  if (loading) return (
+    <div style={styles.wrapper}>
+      <div style={styles.container}>
+        <p style={styles.loading}>Loading invoice...</p>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={styles.wrapper}>
+      <div style={styles.container}>
+        <div style={styles.header}>
+          <FileText size={40} color="#059669" />
+          <h1 style={styles.title}>Edit Draft Invoice</h1>
+          <p style={styles.subtitle}>Update invoice details before finalizing</p>
+        </div>
+
+        <div style={styles.layout}>
+          {/* Customer Details */}
+          <div style={styles.card}>
+            <div style={styles.cardHeader}>
+              <User size={20} color="#059669" />
+              <h3 style={styles.cardTitle}>Customer Details</h3>
+            </div>
+            
+            <div style={styles.cardBody}>
+              <div style={styles.field}>
+                <label style={styles.label}>Customer Name *</label>
+                <input
+                  style={errors.customerName ? styles.inputError : styles.input}
+                  value={customer.name}
+                  onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
+                  placeholder="Enter customer name"
+                />
+                {errors.customerName && <span style={styles.error}>{errors.customerName}</span>}
+              </div>
+
+              <div style={styles.row}>
+                <div style={styles.field}>
+                  <label style={styles.label}>Phone</label>
+                  <input
+                    style={styles.input}
+                    value={customer.phone || ''}
+                    onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
+                    placeholder="Phone number"
+                  />
+                </div>
+
+                <div style={styles.field}>
+                  <label style={styles.label}>Email</label>
+                  <input
+                    type="email"
+                    style={styles.input}
+                    value={customer.email || ''}
+                    onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
+                    placeholder="Email address"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Items */}
+          <div style={styles.card}>
+            <div style={styles.cardHeader}>
+              <Package size={20} color="#059669" />
+              <h3 style={styles.cardTitle}>Items</h3>
+            </div>
+            
+            <div style={styles.cardBody}>
+              {items.map((item, index) => (
+                <div key={index} style={styles.itemCard}>
+                  <div style={styles.itemHeader}>
+                    <span style={styles.itemNum}>Item #{index + 1}</span>
+                    {items.length > 1 && (
+                      <button
+                        type="button"
+                        style={styles.removeBtn}
+                        onClick={() => removeItem(index)}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
+                  </div>
+
+                  <div style={styles.field}>
+                    <label style={styles.label}>Item Name *</label>
+                    <input
+                      style={errors[`item_${index}_name`] ? styles.inputError : styles.input}
+                      value={item.itemName}
+                      onChange={(e) => updateItem(index, 'itemName', e.target.value)}
+                      placeholder="Enter item name"
+                    />
+                    {errors[`item_${index}_name`] && <span style={styles.error}>{errors[`item_${index}_name`]}</span>}
+                  </div>
+
+                  <div style={styles.row}>
+                    <div style={styles.field}>
+                      <label style={styles.label}>Quantity *</label>
+                      <input
+                        type="number"
+                        min="1"
+                        style={errors[`item_${index}_qty`] ? styles.inputError : styles.input}
+                        value={item.quantity}
+                        onChange={(e) => updateItem(index, 'quantity', Number(e.target.value))}
+                      />
+                      {errors[`item_${index}_qty`] && <span style={styles.error}>{errors[`item_${index}_qty`]}</span>}
+                    </div>
+
+                    <div style={styles.field}>
+                      <label style={styles.label}>Price *</label>
+                      <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        style={errors[`item_${index}_price`] ? styles.inputError : styles.input}
+                        value={item.price}
+                        onChange={(e) => updateItem(index, 'price', Number(e.target.value))}
+                      />
+                      {errors[`item_${index}_price`] && <span style={styles.error}>{errors[`item_${index}_price`]}</span>}
+                    </div>
+                  </div>
+
+                  <div style={styles.itemTotal}>
+                    <span>Amount:</span>
+                    <span style={styles.amount}>₹{(item.quantity * item.price).toFixed(2)}</span>
+                  </div>
+                </div>
+              ))}
+
+              <button type="button" style={styles.addBtn} onClick={addItem}>
+                <Plus size={18} />
+                Add Item
+              </button>
+            </div>
+          </div>
+
+          {/* Summary */}
+          <div style={styles.card}>
+            <div style={styles.cardBody}>
+              <div style={styles.summary}>
+                <div style={styles.summaryRow}>
+                  <span style={styles.summaryLabel}>Subtotal:</span>
+                  <span style={styles.summaryValue}>₹{calculateSubtotal().toFixed(2)}</span>
+                </div>
+                <p style={styles.note}>Tax will be calculated based on your business settings</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div style={styles.buttons}>
+            <button 
+              onClick={updateDraftInvoice} 
+              style={saving ? styles.saveBtnDisabled : styles.saveBtn}
+              disabled={saving}
+            >
+              <Save size={18} />
+              {saving ? 'Saving...' : 'Save Draft'}
+            </button>
+            <button 
+              onClick={handleCancel} 
+              style={styles.cancelBtn}
+              disabled={saving}
+            >
+              <X size={18} />
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
+export default EditDraftInvoice;

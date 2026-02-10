@@ -348,8 +348,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
       <footer style={styles.footer}>
         <div style={styles.footerContent}>
           <div style={styles.footerLeft}>
