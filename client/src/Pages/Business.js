@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Building2, User, Phone, FileText, MapPin, Percent } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+const API_URL = process.env.REACT_APP_API_URL;
+
 
 const Business = () => {
   const [formData, setFormData] = useState({

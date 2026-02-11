@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FileText, Zap, TrendingUp, Shield, Smartphone, Users, CheckCircle, ArrowRight, Play } from 'lucide-react';
 import toast from "react-hot-toast";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const HomePage = () => {
   const [scrollY, setScrollY] = useState(0);

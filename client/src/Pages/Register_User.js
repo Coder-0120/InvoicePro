@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Lock, FileText } from 'lucide-react';
 import toast from "react-hot-toast";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Register_User = () => {
   const [name, setName] = useState("");
@@ -14,7 +15,7 @@ const Register_User = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-        await axios.post(`http://localhost:5000/api/user/register`,{
+        await axios.post(`${API_URL}api/user/register`,{
             name,email,password
         });
         toast.success("User Registered successfully..");

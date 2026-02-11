@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { FileText, User, Package, Plus, Trash2, Save, X } from 'lucide-react';
 import toast from "react-hot-toast";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const EditDraftInvoice = () => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ const EditDraftInvoice = () => {
     name: "",
     phone: "",
     email: "",
-    address: "" // Added address field
+    address: "" 
   });
 
   const [items, setItems] = useState([]);
@@ -20,11 +21,11 @@ const EditDraftInvoice = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // ================= FETCH INVOICE =================
+  //  FETCH INVOICE 
   useEffect(() => {
     const fetchInvoice = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/invoice/my/${id}`);
+        const res = await axios.get(`${API_URL}api/invoice/my/${id}`);
 
         if (res.data.invoice.status !== "draft") {
           toast.error("Only draft invoices can be edited");
@@ -45,7 +46,7 @@ const EditDraftInvoice = () => {
   }, [id, navigate]);
 
 
-  // ================= ITEM UPDATE =================
+  //  ITEM UPDATE 
   const updateItem = (index, field, value) => {
     const updated = [...items];
     updated[index][field] = value;
@@ -66,7 +67,7 @@ const EditDraftInvoice = () => {
     }
   };
 
-  // ================= VALIDATION =================
+  //  VALIDATION 
   const validate = () => {
     const newErrors = {};
     
@@ -88,13 +89,13 @@ const EditDraftInvoice = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ================= UPDATE DRAFT =================
+  //  UPDATE DRAFT
   const updateDraftInvoice = async () => {
     if (!validate()) return;
 
     setSaving(true);
     try {
-      await axios.put(`http://localhost:5000/api/invoice/${id}`, {
+      await axios.put(`${API_URL}api/invoice/${id}`, {
         customer,
         items
       });

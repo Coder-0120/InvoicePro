@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Profile = () => {
   const [profileData, setProfileData] = useState({
@@ -17,7 +18,7 @@ const Profile = () => {
     console.log("Fetching profile for userId:", userId);
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/user/profile/${userId}`);
+        const res = await axios.get(`${API_URL}api/user/profile/${userId}`);
         setProfileData({ ...profileData, name: res.data.user.name, email: res.data.user.email });
 
       }
@@ -33,7 +34,7 @@ const Profile = () => {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/user/update/${userId}`, {
+      await axios.put(`${API_URL}api/user/update/${userId}`, {
         name: profileData.name
       });
       toast.success("Profile updated successfully");

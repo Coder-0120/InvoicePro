@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FileText, Mail, Phone, MapPin, Calendar, Download, Printer, Edit, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+const API_URL = process.env.REACT_APP_API_URL;
 
 const InvoicePreview = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const InvoicePreview = () => {
   useEffect(() => {
     const fetchInvoice = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/invoice/my/${id}`);
+        const res = await axios.get(`${API_URL}api/invoice/my/${id}`);
         setInvoice(res.data.invoice);
         setLoading(false);
       } catch (error) {
@@ -42,7 +43,7 @@ const InvoicePreview = () => {
 
   const handleDownload = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/invoice/download/${id}`, {
+      const response = await axios.get(`${API_URL}api/invoice/download/${id}`, {
         responseType: 'blob'
       });
       
