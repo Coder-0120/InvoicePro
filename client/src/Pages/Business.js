@@ -29,7 +29,7 @@ const Business = () => {
     const fetchBusiness = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/business/my/${userId}`
+          `${API_URL}api/business/my/${userId}`
         );
 
         if (res.data?.business) {
@@ -101,12 +101,12 @@ const Business = () => {
 
       if (isBusinessCreated) {
         res = await axios.put(
-          `http://localhost:5000/api/business/update/${userId}`,
+          `${API_URL}api/business/update/${userId}`,
           payload
         );
       } else {
         res = await axios.post(
-          "http://localhost:5000/api/business/create",
+          `${API_URL}api/business/create`,
           { ...payload, gstNumber: formData.gstNumber }
         );
       }
