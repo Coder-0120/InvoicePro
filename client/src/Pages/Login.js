@@ -15,7 +15,7 @@ const Login = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-        const res = await axios.post(`${API_URL}api/user/login`,{
+        const res = await axios.post(`${API_URL}/api/user/login`,{
             email,password
         });
         localStorage.setItem("UserInfo",JSON.stringify(res.data));
