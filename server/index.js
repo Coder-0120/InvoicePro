@@ -13,7 +13,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://invoice-pro-sepia.vercel.app/home"
+      "https://invoice-pro-sepia.vercel.app"
     ],
     credentials: true
   })
