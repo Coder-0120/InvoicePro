@@ -10,14 +10,19 @@ const connectDB=require("./config/db.js");
 require("dotenv").config();
 app.use(express.json());
 // app.use(cors());
-app.use(
-  cors({
-    origin: [
-      "http://localhost:3000",
-      "https://invoice-pro-sepia.vercel.app"
-    ]
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:3000",
+//       "https://invoice-pro-sepia.vercel.app"
+//     ]
+//   })
+// );
+app.use(cors({
+  origin: 'https://invoice-pro-git-main-anshul-vermas-projects-02bf349c.vercel.app',
+  methods: ['GET','POST','PUT','DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 connectDB();
 app.get("/",(req,res)=>{
     res.send("hello world ");
