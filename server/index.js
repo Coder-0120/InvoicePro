@@ -9,15 +9,15 @@ const dashboardRoute=require("./Routes/dashboardRoute.js");
 const connectDB=require("./config/db.js");
 require("dotenv").config();
 app.use(express.json());
-app.use(cors());
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:3000",
-//       "https://invoice-pro-sepia.vercel.app"
-//     ]
-//   })
-// );
+// app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://invoice-pro-sepia.vercel.app"
+    ]
+  })
+);
 connectDB();
 app.get("/",(req,res)=>{
     res.send("hello world ");
