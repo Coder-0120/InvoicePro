@@ -19,9 +19,7 @@ app.use(express.json());
 //   })
 // );
 const allowedOrigins = [
-  'https://invoice-1ymtcu128-anshul-vermas-projects-02bf349c.vercel.app', // new frontend
-  'https://invoice-pro-git-main-anshul-vermas-projects-02bf349c.vercel.app', // old frontend if needed
-  'http://localhost:3000' // for local dev
+  'https://invoice-1ymtcu128-anshul-vermas-projects-02bf349c.vercel.app' // new frontend
 ];
 
 app.use(cors({

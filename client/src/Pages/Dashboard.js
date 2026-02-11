@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { FileText, DollarSign, Clock, XCircle, Edit } from 'lucide-react';
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -27,11 +28,11 @@ const userId = storedData?.userInfo?.userId || null;
     const fetchDashboardData = async () => {
       try {
         // Fetch stats
-        const statsRes = await axios.get(`http://localhost:5000/api/dashboard/stats/${userId}`);
+        const statsRes = await axios.get(`${API_URL}api/dashboard/stats/${userId}`);
         setStats(statsRes.data);
 
         // Fetch recent invoices (last 5)
-        const invoicesRes = await axios.get(`http://localhost:5000/api/invoice/allmy/${userId}?limit=5`);
+        const invoicesRes = await axios.get(`${API_URL}api/invoice/allmy/${userId}?limit=5`);
         setRecentInvoices(invoicesRes.data.invoices);
         
         setLoading(false);
