@@ -10,11 +10,12 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [focusedField, setFocusedField] = useState("");
   const navigate = useNavigate();
+  console.log(API_URL);
 
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-        const res = await axios.post("http://localhost:5000/api/user/login",{
+        const res = await axios.post(`${API_URL}api/user/login`,{
             email,password
         });
         localStorage.setItem("UserInfo",JSON.stringify(res.data));
