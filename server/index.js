@@ -19,13 +19,18 @@ app.use(express.json());
 //   })
 // );
 const allowedOrigins = [
-  'https://invoice-1ymtcu128-anshul-vermas-projects-02bf349c.vercel.app' // new frontend
+  'https://invoice-1ymtcu128-anshul-vermas-projects-02bf349c.vercel.app', // NEW frontend
+  'https://invoice-pro-git-main-anshul-vermas-projects-02bf349c.vercel.app', // OLD frontend (optional)
+  'http://localhost:3000' // local dev
 ];
 
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin) return callback(null, true); // allow Postman/curl
+    // allow requests like Postman or mobile apps with no origin
+    if (!origin) return callback(null, true); 
+
     if (allowedOrigins.includes(origin)) return callback(null, true);
+
     callback(new Error('CORS not allowed'), false);
   },
   methods: ['GET','POST','PUT','DELETE'],
