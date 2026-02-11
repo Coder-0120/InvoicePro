@@ -9,8 +9,15 @@ const dashboardRoute=require("./Routes/dashboardRoute.js");
 const connectDB=require("./config/db.js");
 require("dotenv").config();
 app.use(express.json());
-app.use(cors());
-
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://invoicepro.vercel.app"
+    ],
+    credentials: true
+  })
+);
 connectDB();
 app.get("/",(req,res)=>{
     res.send("hello world ");
@@ -19,6 +26,6 @@ app.use("/api/user",userRoute);
 app.use("/api/business",businessRoute);
 app.use("/api/invoice",invoiceRoute);
 app.use("/api/dashboard",dashboardRoute);
-app.listen(5000,()=>{
-    console.log("server is running on port 5000");
+app.listen(process.env.PORT,()=>{
+    console.log(`server is running on port ${process.env.PORT}`);
 })
