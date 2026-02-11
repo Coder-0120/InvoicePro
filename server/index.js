@@ -19,10 +19,14 @@ app.use(express.json());
 //   })
 // );
 app.use(cors({
-  origin: 'https://invoice-pro-git-main-anshul-vermas-projects-02bf349c.vercel.app',
+  origin: [
+    'https://invoice-pro-git-main-anshul-vermas-projects-02bf349c.vercel.app',
+    'http://localhost:3000' // optional for dev
+  ],
   methods: ['GET','POST','PUT','DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type','Authorization']
 }));
+
 connectDB();
 app.get("/",(req,res)=>{
     res.send("hello world ");
