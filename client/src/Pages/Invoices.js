@@ -16,7 +16,7 @@ const Invoices = () => {
   const fetchInvoices = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:5000/api/invoice/allmy/${userId}`, {
+        const res = await axios.get(`${API_URL}api/invoice/allmy/${userId}`, {
         });
         setInvoices(res.data.invoices);
       } catch (error) {
@@ -71,7 +71,7 @@ const Invoices = () => {
   }
   const finalize = async (invoiceId) => {
     try {
-      await axios.put(`http://localhost:5000/api/invoice/finalize/${invoiceId}`);
+      await axios.put(`${API_URL}api/invoice/finalize/${invoiceId}`);
       toast.success("Invoice finalized successfully");
       await fetchInvoices();
     }
@@ -83,7 +83,7 @@ const Invoices = () => {
   }
   const markAsPaid = async (invoiceId) => {
     try {
-      await axios.put(`http://localhost:5000/api/invoice/paid/${invoiceId}`);
+      await axios.put(`${API_URL}api/invoice/paid/${invoiceId}`);
       toast.success("Invoice marked as paid successfully");
       // window.location.reload();
       await fetchInvoices();
@@ -94,7 +94,7 @@ const Invoices = () => {
   };
   const cancelInvoice = async (invoiceId) => {
     try {
-      await axios.put(`http://localhost:5000/api/invoice/cancel/${invoiceId}`);
+      await axios.put(`${API_URL}api/invoice/cancel/${invoiceId}`);
       toast.success("Invoice cancelled successfully");
       await fetchInvoices();
     }
