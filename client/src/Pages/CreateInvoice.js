@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FileText, User, Package, Plus, Trash2 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+const API_URL = process.env.REACT_APP_API_URL;
 
 const CreateInvoice = () => {
   const [formData, setFormData] = useState({
@@ -79,7 +80,7 @@ const userId = storedData?.userInfo?.userId || null;
       }
 
       // Make API call
-      const response = await axios.post('http://localhost:5000/api/invoice/create', {
+      const response = await axios.post(`${API_URL}api/invoice/create`, {
           userId: userId,
           customer: {
             name: formData.customerName,
