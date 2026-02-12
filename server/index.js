@@ -18,19 +18,16 @@ app.use(express.json());
 //     ]
 //   })
 // );
-// app.use(cors({
-//   origin: [
-//     'https://invoice-pro-git-main-anshul-vermas-projects-02bf349c.vercel.app',
-//     'http://localhost:3000' // optional for dev
-//   ],
-//   methods: ['GET','POST','PUT','DELETE'],
-//   allowedHeaders: ['Content-Type','Authorization']
-// }));
-
 app.use(cors({
-  origin: 'https://invoice-1ymtcu128-anshul-vermas-projects-02bf349c.vercel.app/home', // your frontend domain
-  credentials: true // allow cookies / auth headers
+  origin: [
+    'https://invoice-pro-sepia.vercel.app',
+    'http://localhost:3000' // optional for dev
+  ],
+  methods: ['GET','POST','PUT','DELETE'],
+  allowedHeaders: ['Content-Type','Authorization'],
+  credentials: true
 }));
+
 connectDB();
 app.get("/",(req,res)=>{
     res.send("hello world ");
